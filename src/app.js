@@ -46,6 +46,8 @@ app.get('', (req, res)=>{
 //   })
 // })
 
+// info.ocr.adv_ocr.data[0].textAnnotations[0].description
+
 app.post('/upload', upload.single("file"), (req, res, next)=>{
   const tempPath = req.file.path;
   const targetPath = path.join(__dirname, "../public/img/image.png");
@@ -58,6 +60,20 @@ app.post('/upload', upload.single("file"), (req, res, next)=>{
           console.warn(err);
           return handleError(err, res);
         }
+
+        var text =  result.info.ocr.adv_ocr.data[0].textAnnotations[0].description;
+        var pattern = /[0-9]{4}/;
+        text = text.split(" ");
+        for(var i = 0; i < text.length; i++){
+          var subtext = text[i].split('\n');
+          for(var j = 0; j < subtext.length; j++){
+            if(subtext[i].match(subtext[i], pattern) != null)
+              console.log(subtext[i]);
+              break;
+          }
+        }
+        // var invoiceCode = text.match(text, pattern);
+        // console.log(invoiceCode);
         res.status(200).contentType('text/plain').send(result);
       });
       // res.imgPath = targetPath;
