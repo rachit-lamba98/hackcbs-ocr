@@ -7,9 +7,9 @@ const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
-  cloud_name: 'hackcbs',
-  api_key: '869114977822696',
-  api_secret: '9wYVjhLniftmo9_9Zg_JzsXOjl0'
+  cloud_name: 'cryptx',
+  api_key: '226239969415579',
+  api_secret: 'M_hVUUOuQDzlFKpjNKg8eRoLTRs'
 });
 
 const app = express();
@@ -21,6 +21,8 @@ const handleError = (err, res) => {
     .contentType("text/plain")
     .send({error:"Oops! Something went wrong!" + err});
 };
+
+
 
 const upload = multer({
   dest: "/home/rachit/Desktop/study/hackathon/public/img"
@@ -60,21 +62,62 @@ app.post('/upload', upload.single("file"), (req, res, next)=>{
           console.warn(err);
           return handleError(err, res);
         }
-
+        // var pattern = /^(/s)+([0-9]{4})+(/s)$/;
+        // var datePattern = /^[0-9]{2}[-|\/]{1}[0-9]{2}[-|\/]{1}[0-9]{4}$/;
+        // var pattern = /^(?<=\s)\d(?=\s)$/;
         var text =  result.info.ocr.adv_ocr.data[0].textAnnotations[0].description;
-        var pattern = /[0-9]{4}/;
-        text = text.split(" ");
-        for(var i = 0; i < text.length; i++){
-          var subtext = text[i].split('\n');
-          for(var j = 0; j < subtext.length; j++){
-            if(subtext[i].match(subtext[i], pattern) != null)
-              console.log(subtext[i]);
-              break;
+        var invoiceRegex = /^\w{2,3}\-\d{4}\-$/ || /^\d{4}$/ ;
+        var dateRegex = /^(([0-9])|([0-2][0-9])|([3][0-1]))\-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\-\d{4}$/;
+        var moneyRegex1 =  /^\d+\,\d+$/;
+        var moneyRegex2 = /^\d+\,\d+\.\d*$/
+        var d = text.split("\n");
+          out = [];
+
+        for(var i=0;i<d.length;i++){
+          var d2 = d[i].split(" ");
+          // for(var j =0;j<d2.length;j++){
+          //   if(d2[j].match(dateRegex)!=null){
+          //     res.send(d2[j]);
+          //     return;
+          //   }
+          // }
+          // for(var k =0;k<d2.length;k++){
+          //   if(d2[k].match(invoiceRegex)!=null){
+          //     res.send(d2[k]);
+          //     return;
+          //   }
+          // }
+          // console.log(text);
+          for(var l =0;l<d2.length;l++){
+            if(d2[l].match(moneyRegex1) != null || d2[l].match(moneyRegex2) != null){
+              out.push(d2[l]);
+            }
           }
+          console.log(out);
+          res.send(out[out.length-1]);
+          return;
         }
+
+
+        // console.log("".match(dateRegex))
+        // for(var i=0; i<text.length; i++){
+        //   console.log(text[i].match(invoiceRegex));
+        // }
+        // console.log(text.match(invoiceRegex)[0]);
+        // console.log(text.match(dateRegex)[0]);
+        // var pattern = /[0-9]{4}/;
+        // text = text.split(" ");
+        // for(var i = 0; i < text.length; i++){
+        //   var subtext = text[i].split('\n');
+        //   for(var j = 0; j < subtext.length; j++){
+        //     if(subtext[i].match(subtext[i], pattern) != null)
+        //       console.log(subtext[i]);
+        // //       break;
+        //   }
+        // }
         // var invoiceCode = text.match(text, pattern);
         // console.log(invoiceCode);
-        res.status(200).contentType('text/plain').send(result);
+        res.status(200).contentType('text/plain').send(text);
       });
       // res.imgPath = targetPath;
 
