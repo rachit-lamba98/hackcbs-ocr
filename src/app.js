@@ -13,11 +13,11 @@ cloudinary.config({
 });
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 // const spawn = cp.spawn;
 const handleError = (err, res) => {
   res
-    .status(500)
+    .status(503)
     .contentType("text/plain")
     .send({error:"Oops! Something went wrong!" + err});
 };
