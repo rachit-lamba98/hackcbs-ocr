@@ -14,6 +14,7 @@ img_height ,img_width, img_depth = img_cv.shape
 flag = 1 if img_height < 300 and img_width < 300 else 2
 
 #converting to greyscale
+print("converting to greyscale")
 gray = cv2.cvtColor(img_cv, cv2.COLOR_BGR2GRAY)
 
 # applying binary threshold
