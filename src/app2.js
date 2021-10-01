@@ -1,19 +1,18 @@
-
+"use strict"
 var express = require('express');
 var app = express();
 const path = require('path');
 
-app.listen(3000, function() {
-	console.log('server running on port 3000');
+app.listen(3001, function() {
+	console.log('server running on port 3001');
 } )
 
 
 app.get('/name', callName, callBack);
 
 function callName(req, res, next) {
-
-	res['img_path'] = "wolololo";
-	console.log(res.img_path + " from first one");
+	res['img_path'] = "nonono";
+	console.log(res.img_path + " from last one");
 	next();
 	var exec = require("child_process").exec;
 
